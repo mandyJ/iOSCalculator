@@ -7,21 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		21373D161EE9EC5900CF6EA1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21373D151EE9EC5900CF6EA1 /* ViewController.swift */; };
 		21C55E471EE7558300D1448E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C55E461EE7558300D1448E /* AppDelegate.swift */; };
-		21C55E491EE7558300D1448E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C55E481EE7558300D1448E /* ViewController.swift */; };
 		21C55E4C1EE7558300D1448E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21C55E4A1EE7558300D1448E /* Main.storyboard */; };
 		21C55E4E1EE7558300D1448E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21C55E4D1EE7558300D1448E /* Assets.xcassets */; };
 		21C55E511EE7558300D1448E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21C55E4F1EE7558300D1448E /* LaunchScreen.storyboard */; };
+		21C55E591EE8A49D00D1448E /* CalculatorBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C55E581EE8A49D00D1448E /* CalculatorBrain.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		21373D151EE9EC5900CF6EA1 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		21C55E431EE7558300D1448E /* Calculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Calculator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21C55E461EE7558300D1448E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		21C55E481EE7558300D1448E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		21C55E4B1EE7558300D1448E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		21C55E4D1EE7558300D1448E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		21C55E501EE7558300D1448E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		21C55E521EE7558300D1448E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		21C55E581EE8A49D00D1448E /* CalculatorBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalculatorBrain.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,8 +56,9 @@
 		21C55E451EE7558300D1448E /* Calculator */ = {
 			isa = PBXGroup;
 			children = (
+				21373D151EE9EC5900CF6EA1 /* ViewController.swift */,
+				21C55E581EE8A49D00D1448E /* CalculatorBrain.swift */,
 				21C55E461EE7558300D1448E /* AppDelegate.swift */,
-				21C55E481EE7558300D1448E /* ViewController.swift */,
 				21C55E4A1EE7558300D1448E /* Main.storyboard */,
 				21C55E4D1EE7558300D1448E /* Assets.xcassets */,
 				21C55E4F1EE7558300D1448E /* LaunchScreen.storyboard */,
@@ -91,11 +94,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = "Mandy Jor";
 				TargetAttributes = {
 					21C55E421EE7558300D1448E = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0830;
 					};
 				};
 			};
@@ -135,7 +139,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				21C55E491EE7558300D1448E /* ViewController.swift in Sources */,
+				21373D161EE9EC5900CF6EA1 /* ViewController.swift in Sources */,
+				21C55E591EE8A49D00D1448E /* CalculatorBrain.swift in Sources */,
 				21C55E471EE7558300D1448E /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -175,8 +180,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -220,8 +227,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -240,6 +249,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -253,6 +263,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = mandyJor.Calculator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -264,6 +275,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = mandyJor.Calculator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -286,6 +298,7 @@
 				21C55E571EE7558300D1448E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
