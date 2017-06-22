@@ -10,35 +10,33 @@ import Foundation
 
 struct CalculatorBrain {
     
-    private var accumulator: Double?
-    var result: Double? {
-        get{
-            return accumulator
-        }
-    }
+//    var result: Double? {
+//        get{
+//            let (result, _, _) = evaluate()
+//            return result
+//        }
+//    }
+//    
+//    var sequenceDisplay: String {
+//        get{
+//            let (_, _, description) = evaluate()
+//            return description
+//        }
+//    }
+//    
+//    var getResultIsPending: Bool {
+//        get{
+//            let (_, resultIsPending, _) = evaluate()
+//            return resultIsPending
+//        }
+//    }
     
-    private var currentSequence: String?
-    var sequenceDisplay: String? {
-        get{
-            return currentSequence
-        }
-    }
-    
-    private var resultIsPending = false
-    var getResultIsPending: Bool? {
-        get{
-            return resultIsPending
-        }
-    }
-    
-    private var nested = false
     
     private enum Operation {
         case constant(Double)
         case unary((Double) -> Double)
         case binary((Double, Double) -> Double)
         case equals
-        case clear
     }
     
     private var operations: Dictionary<String, Operation> = [
@@ -54,67 +52,108 @@ struct CalculatorBrain {
         "÷": Operation.binary({$0 / $1}),
         "+": Operation.binary({$0 + $1}),
         "-": Operation.binary({$0 - $1}),
-        "=": Operation.equals,
-        "clear": Operation.clear,
+        "=": Operation.equals
     ]
     
-    private var pendingBinaryOperation: PendingBinaryOperation?
-    
-    mutating func performOperation(_ symbol: String) {
-        if let operation = operations[symbol]{
-            switch operation{
-            case .constant(let value):
-                accumulator = value
-                
-                if currentSequence != nil {
-                    if resultIsPending {
-                        currentSequence = currentSequence! + " " + symbol
-                        nested=true
-                    }else{
-                        currentSequence = symbol
-                    }
-                }else{
-                    currentSequence = symbol
+    func evaluate(using variables: Dictionary<String,Double>? = nil)-> (result: Double?, isPending: Bool, description: String) {
+        
+        print("\n^^^^^^^^^^^^^^^")
+        printEntryTypesSequence(sequence: sequence)
+        
+        var accumulator: Double?
+        var resultIsPending = false
+        var description: String = ""
+        
+        var pendingBinaryOperation: PendingBinaryOperation?
+        var nested = false
+        
+        func performPendingBinaryOperation() {
+            if accumulator != nil && pendingBinaryOperation != nil && !description.isEmpty{
+                if !nested{
+                    description = description + " " + String(accumulator!)
                 }
-            case .unary(let function):
-                if accumulator != nil {
-                    if currentSequence != nil {
-                        if resultIsPending {
-                            currentSequence = currentSequence! + " " + symbol + "(" + String(accumulator!) + ")"
+                nested = false
+                
+                accumulator = pendingBinaryOperation!.perform(with:accumulator!)
+                print(description)
+                
+                
+                pendingBinaryOperation = nil
+                resultIsPending = false
+                print("Result is Pending: \(resultIsPending)")
+            }
+        }
+        
+        for entryType in sequence {
+            switch entryType {
+            
+            case .operand(let value):
+                accumulator = value
+            
+            case .operation(let symbol):
+                if let operation = operations[symbol]{
+                    
+                    switch operation{
+                    case .constant(let value):
+                        accumulator = value
+                        
+                        if !description.isEmpty && resultIsPending {
+                            description = description + " " + symbol
                             nested=true
                         }else{
-                            currentSequence = symbol + "(" + currentSequence! + ")"
-
+                            description = symbol
                         }
-                    }else{
-                        currentSequence = symbol + "(" + String(accumulator!) + ")"
+                    case .unary(let function):
+                        if accumulator != nil {
+                            if !description.isEmpty {
+                                if resultIsPending {
+                                    description = description + " " + symbol + "(" + String(accumulator!) + ")"
+                                    nested=true
+                                }else{
+                                    description = symbol + "(" + description + ")"
+                                    
+                                }
+                            }else{
+                                description = symbol + "(" + String(accumulator!) + ")"
+                            }
+                            
+                            accumulator = function(accumulator!)
+                            print(description)
+                        }
+                    case .binary(let function):
+                        if accumulator != nil {
+                            pendingBinaryOperation = PendingBinaryOperation(function: function, firstOperand: accumulator!)
+                            if !description.isEmpty{
+                                description = description + " " + symbol
+                                
+                            }else{
+                                description = String(accumulator!) + " " + symbol
+                            }
+                            
+                            accumulator = nil
+                            resultIsPending = true
+                        }
+                    case .equals:
+                        performPendingBinaryOperation()
                     }
-                    
-                    accumulator = function(accumulator!)
-                    print(currentSequence!)
                 }
-            case .binary(let function):
-                if accumulator != nil {
-                    pendingBinaryOperation = PendingBinaryOperation(function: function, firstOperand: accumulator!)
-                    if currentSequence != nil {
-                        currentSequence = currentSequence! + " " + symbol
-
-                    }else{
-                        currentSequence = String(accumulator!) + " " + symbol
-                    }
-                    
-                    accumulator = nil
-                    resultIsPending = true
-                    print("Result is Pending: \(resultIsPending)")
+            case .variable(let variable):
+                if let variableDictionary = variables{
+                    accumulator = variableDictionary[variable]
+                }else{
+                    accumulator = 0
                 }
-            case .equals:
-                performPendingBinaryOperation()
-            case .clear:
-                accumulator = nil
-                currentSequence = nil
+                
+                if !description.isEmpty && resultIsPending {
+                    description = description + " " + variable
+                    nested=true
+                }else{
+                    description = variable
+                }
             }
-            
         }
+        print("Result is Pending: \(resultIsPending)")
+        return (accumulator, resultIsPending, description)
     }
     
     private struct PendingBinaryOperation{
@@ -126,24 +165,45 @@ struct CalculatorBrain {
         }
     }
     
-    mutating private func performPendingBinaryOperation() {
-        if accumulator != nil && pendingBinaryOperation != nil && currentSequence != nil {
-            if !nested{
-                currentSequence = currentSequence! + " " + String(accumulator!)
+    mutating func setOperand(_ operand: Double) {
+        sequence.append(entryTypes.operand(operand))
+    }
+    
+    private enum entryTypes {
+        case operand(Double)
+        case variable(String)
+        case operation(String)
+    }
+    
+    private var sequence: Array<entryTypes> = []
+    
+    mutating func performOperation(_ symbol: String) {
+        if symbol == "clear" {
+            sequence = []
+        } else if symbol == "undo" {
+            if !sequence.isEmpty {
+                sequence.removeLast()
             }
-            nested = false
-
-            accumulator = pendingBinaryOperation!.perform(with:accumulator!)
-            print(currentSequence!)
-
-            
-            pendingBinaryOperation = nil
-            resultIsPending = false
-            print("Result is Pending: \(resultIsPending)")
+        } else{
+            sequence.append(entryTypes.operation(symbol))
         }
     }
     
-    mutating func setOperand(_ operand: Double) {
-        accumulator = operand
+    mutating func setOperand(variable named: String){
+        sequence.append(entryTypes.variable(named))
     }
+    
+    private func printEntryTypesSequence(sequence: Array<entryTypes>) {
+        print("------------------")
+        
+        for entryType in sequence{
+            switch entryType{
+            case .operand(let value):
+                print(String(value))
+            case .variable(let value), .operation(let value):
+                print(value)
+            }
+        }
+    }
+    
 }
